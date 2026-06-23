@@ -1,0 +1,13 @@
+{
+  "name": "fresh-eyes",
+  "displayName": "Fresh Eyes",
+  "version": "1.0.0",
+  "description": "Get fresh eyes on what you just built. A /fresh-eyes command delegates to a read-only reviewer subagent that reviews your diff in its own clean context — no confirmation bias from the build chat — then you fix the findings in the session that still knows every decision.",
+  "author": {
+    "name": "Yang"
+  },
+  "homepage": "https://github.com/yangzhengca/claude-plugins",
+  "repository": "https://github.com/yangzhengca/claude-plugins",
+  "keywords": ["code-review", "diff", "subagent", "review", "git"],
+  "license": "MIT"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "yangzhengca",
+  "owner": {
+    "name": "Yang"
+  },
+  "description": "Yang's Claude Code plugins.",
+  "plugins": [
+    {
+      "name": "fresh-eyes",
+      "source": "./plugins/fresh-eyes",
+      "description": "Get fresh eyes on what you just built: /fresh-eyes delegates to a read-only reviewer subagent that reviews in its own clean context, then you fix findings in the session that built the code."
+    }
+  ]
+}

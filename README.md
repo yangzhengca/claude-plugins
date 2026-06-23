@@ -61,8 +61,6 @@ Nothing is modified — ask your main session to apply any fixes you want.
 |------|------------|
 | `plugins/fresh-eyes/commands/fresh-eyes.md` | The `/fresh-eyes` slash command (scope resolution + delegation) |
 | `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent |
-| `plugins/fresh-eyes/.claude-plugin/plugin.json` | The `fresh-eyes` plugin manifest |
-| `.claude-plugin/marketplace.json` | Marketplace manifest — lists every plugin in this repo by `source` path |
 
 ## License
 

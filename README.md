@@ -39,7 +39,7 @@ still knows everything you asked for.
 /plugin marketplace add yangzhengca/fresh-eyes
 
 # 2. Install the plugin
-/plugin install fresh-eyes@fresh-eyes
+/plugin install fresh-eyes@yangzhengca
 ```
 
 ## Usage
@@ -59,10 +59,10 @@ Nothing is modified — ask your main session to apply any fixes you want.
 
 | Path | What it is |
 |------|------------|
-| `commands/fresh-eyes.md` | The `/fresh-eyes` slash command (scope resolution + delegation) |
-| `agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent |
-| `.claude-plugin/plugin.json` | Plugin manifest |
-| `.claude-plugin/marketplace.json` | Marketplace manifest (single-plugin, source `./`) |
+| `plugins/fresh-eyes/commands/fresh-eyes.md` | The `/fresh-eyes` slash command (scope resolution + delegation) |
+| `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent |
+| `plugins/fresh-eyes/.claude-plugin/plugin.json` | The `fresh-eyes` plugin manifest |
+| `.claude-plugin/marketplace.json` | Marketplace manifest — lists every plugin in this repo by `source` path |
 
 ## License
 

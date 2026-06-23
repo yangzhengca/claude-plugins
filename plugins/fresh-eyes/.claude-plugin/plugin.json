@@ -6,8 +6,8 @@
   "author": {
     "name": "Yang"
   },
-  "homepage": "https://github.com/yangzhengca/fresh-eyes",
-  "repository": "https://github.com/yangzhengca/fresh-eyes",
+  "homepage": "https://github.com/yangzhengca/claude-plugins",
+  "repository": "https://github.com/yangzhengca/claude-plugins",
   "keywords": ["code-review", "diff", "subagent", "review", "git"],
   "license": "MIT"
 }

@@ -36,13 +36,11 @@ still knows everything you asked for.
 
 ```bash
 # 1. Add this repo as a plugin marketplace
-/plugin marketplace add yang/fresh-eyes
+/plugin marketplace add yangzhengca/fresh-eyes
 
 # 2. Install the plugin
 /plugin install fresh-eyes@fresh-eyes
 ```
-
-> Replace `yang/fresh-eyes` with your actual `owner/repo` once it's on GitHub.
 
 ## Usage
 
@@ -69,4 +67,3 @@ Nothing is modified — ask your main session to apply any fixes you want.
 ## License
 
 MIT
-# fresh-eyes

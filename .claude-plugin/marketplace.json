@@ -1,0 +1,14 @@
+{
+  "name": "fresh-eyes",
+  "owner": {
+    "name": "Yang"
+  },
+  "description": "Fresh Eyes — unbiased diff review, context-aware fixes, one session.",
+  "plugins": [
+    {
+      "name": "fresh-eyes",
+      "source": "./",
+      "description": "Get fresh eyes on what you just built: /fresh-eyes delegates to a read-only reviewer subagent that reviews in its own clean context, then you fix findings in the session that built the code."
+    }
+  ]
+}

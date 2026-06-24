@@ -2,7 +2,7 @@
 
 **Get fresh eyes on what you just built — without leaving the session that built it.**
 
-A Claude Code plugin: the `/fresh-eyes` command delegates to a read-only
+A Claude Code plugin: the `/fresh-eyes:review` command delegates to a read-only
 `fresh-eyes-reviewer` subagent that reviews your diff in its **own clean context
 window**. The reviewer has no memory of how the code was written, so its review
 carries no confirmation bias. Only its report comes back to your main session —
@@ -45,10 +45,13 @@ still knows everything you asked for.
 ## Usage
 
 ```bash
-/fresh-eyes            # review the whole branch (vs. its merge-base)
-/fresh-eyes staged     # review only staged changes  (git diff --staged)
-/fresh-eyes changes    # review only unstaged changes (git diff)
+/fresh-eyes:review            # review the whole branch (vs. its merge-base)
+/fresh-eyes:review staged     # review only staged changes  (git diff --staged)
+/fresh-eyes:review changes    # review only unstaged changes (git diff)
 ```
+
+> Plugin commands are namespaced `/<plugin>:<command>`, so the command is
+> `/fresh-eyes:review` (plugin `fresh-eyes`, command `review`).
 
 The reviewer returns a structured report grouped by severity
 (**Critical / Warning / Nit**), each finding citing `file:line` with a concrete
@@ -59,7 +62,7 @@ Nothing is modified — ask your main session to apply any fixes you want.
 
 | Path | What it is |
 |------|------------|
-| `plugins/fresh-eyes/commands/fresh-eyes.md` | The `/fresh-eyes` slash command (scope resolution + delegation) |
+| `plugins/fresh-eyes/commands/review.md` | The `/fresh-eyes:review` slash command (scope resolution + delegation) |
 | `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent |
 | `plugins/fresh-eyes/.claude-plugin/plugin.json` | The `fresh-eyes` plugin manifest |
 | `.claude-plugin/marketplace.json` | Marketplace manifest — lists every plugin in this repo by `source` path |

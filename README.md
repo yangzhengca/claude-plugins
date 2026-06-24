@@ -37,7 +37,9 @@ still knows everything you asked for.
 ```bash
 # 1. Add this repo as a plugin marketplace
 /plugin marketplace add yangzhengca/claude-plugins
+```
 
+```bash
 # 2. Install the plugin
 /plugin install fresh-eyes@yangzhengca
 ```

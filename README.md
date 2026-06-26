@@ -34,13 +34,13 @@ still knows everything you asked for.
 
 ## Install
 
+### 1. Add this repo as a plugin marketplace
 ```bash
-# 1. Add this repo as a plugin marketplace
 /plugin marketplace add yangzhengca/claude-plugins
 ```
 
+### 2. Install the plugin
 ```bash
-# 2. Install the plugin
 /plugin install fresh-eyes@yangzhengca
 ```
 

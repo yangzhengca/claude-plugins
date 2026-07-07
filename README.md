@@ -50,14 +50,31 @@ still knows everything you asked for.
 /fresh-eyes:review            # review the whole branch (vs. its merge-base)
 /fresh-eyes:review staged     # review only staged changes  (git diff --staged)
 /fresh-eyes:review changes    # review only unstaged changes (git diff)
+/fresh-eyes:review --blind    # skip the task brief — pure code-only review
 ```
 
 > Plugin commands are namespaced `/<plugin>:<command>`, so the command is
 > `/fresh-eyes:review` (plugin `fresh-eyes`, command `review`).
 
+### The task brief
+
+Before delegating, your build session distills a **task brief** from the
+conversation — what you were trying to accomplish and why: the goal,
+requirements, decisions you made (including options you rejected), and
+constraints. The reviewer checks the diff *against the brief*, so it catches
+unmet requirements and scope creep, not just bugs.
+
+The brief carries only the **what and why — never the how**. Implementation
+narrative ("I did X, it works") is deliberately excluded, because passing it
+along would reimport the confirmation bias the clean context exists to remove.
+Pass `--blind` (combinable with a scope, e.g. `/fresh-eyes:review staged --blind`)
+to skip the brief entirely and get a pure code-only review.
+
 The reviewer returns a structured report grouped by severity
 (**Critical / Warning / Nit**), each finding citing `file:line` with a concrete
-suggested fix and a verdict (`ship` / `fix-before-merge` / `needs-discussion`).
+suggested fix, plus a summary carrying a brief-fulfillment assessment
+(`met` / `partially met` / `not met`) and a verdict
+(`ship` / `fix-before-merge` / `needs-discussion`).
 Nothing is modified — ask your main session to apply any fixes you want.
 
 ## What's in the box

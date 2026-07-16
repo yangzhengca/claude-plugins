@@ -51,6 +51,11 @@ still knows everything you asked for.
 /fresh-eyes:review staged     # review only staged changes  (git diff --staged)
 /fresh-eyes:review changes    # review only unstaged changes (git diff)
 /fresh-eyes:review --blind    # skip the task brief — pure code-only review
+
+/fresh-eyes:review-pr 123                                  # review a PR (yours or a teammate's)
+/fresh-eyes:review-pr 123 is the cache invalidation right? # + get a question answered
+/fresh-eyes:review-pr 123 --issue AI-42                    # + check coverage vs a Linear issue
+/fresh-eyes:review-pr 123 --issue AI-42 is retry handled?  # both extras together — no quotes needed
 ```
 
 > Plugin commands are namespaced `/<plugin>:<command>`, so the command is
@@ -77,12 +82,33 @@ suggested fix, plus a summary carrying a brief-fulfillment assessment
 (`ship` / `fix-before-merge` / `needs-discussion`).
 Nothing is modified — ask your main session to apply any fixes you want.
 
+### Reviewing a PR
+
+`/fresh-eyes:review-pr <pr-number>` reviews a GitHub pull request — yours or a
+teammate's — instead of your local diff. The PR is fetched with `gh` and checked out **in an isolated
+git worktree** — your own checkout is never touched — then handed to the same
+reviewer subagent, with the PR's title and body as the task brief (treated as
+author-written claims to verify, not trust). The worktree is cleaned up
+afterwards, and nothing is ever posted to GitHub unless you ask.
+
+Two optional extras:
+
+- **A question or concern** — append it as free text
+  (`/fresh-eyes:review-pr 123 not sure the retry logic handles timeouts`).
+  The reviewer investigates it in the code and answers it explicitly in a
+  dedicated section of the report, alongside the regular review.
+- **A Linear issue** — pass `--issue <id>` and the issue's requirements are
+  fetched and given to the reviewer, which then rates every requirement
+  `met` / `partial` / `missing` with `file:line` evidence, so coverage gaps
+  surface even when the code that *does* exist is correct.
+
 ## What's in the box
 
 | Path | What it is |
 |------|------------|
 | `plugins/fresh-eyes/commands/review.md` | The `/fresh-eyes:review` slash command (scope resolution + delegation) |
-| `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent |
+| `plugins/fresh-eyes/commands/review-pr.md` | The `/fresh-eyes:review-pr` slash command (PR fetch, worktree isolation, Linear requirements + delegation) |
+| `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent shared by both commands |
 
 ## License
 

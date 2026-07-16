@@ -8,7 +8,7 @@
     {
       "name": "fresh-eyes",
       "source": "./plugins/fresh-eyes",
-      "description": "Get fresh eyes on what you just built: /fresh-eyes:review distills your session's goal into a task brief (what + why, never how), then delegates to a read-only reviewer subagent that checks your diff against it in its own clean context, then you fix findings in the session that built the code. Pass --blind for a pure code-only review."
+      "description": "Get fresh eyes on what you just built: /fresh-eyes:review distills your session's goal into a task brief (what + why, never how), then delegates to a read-only reviewer subagent that checks your diff against it in its own clean context, then you fix findings in the session that built the code. Pass --blind for a pure code-only review. /fresh-eyes:review-pr reviews a GitHub PR (yours or a teammate's) in an isolated worktree, optionally answering your questions and checking requirement coverage against a Linear issue (--issue <id>)."
     }
   ]
 }

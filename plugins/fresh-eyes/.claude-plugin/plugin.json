@@ -1,8 +1,8 @@
 {
   "name": "fresh-eyes",
   "displayName": "Fresh Eyes",
-  "version": "1.1.0",
-  "description": "Get fresh eyes on what you just built. A /fresh-eyes:review command distills your session's goal into a task brief (what + why, never how), then delegates to a read-only reviewer subagent that checks your diff against it in its own clean context — no confirmation bias from the build chat — then you fix the findings in the session that still knows every decision. Pass --blind for a pure code-only review.",
+  "version": "1.2.0",
+  "description": "Get fresh eyes on what you just built. A /fresh-eyes:review command distills your session's goal into a task brief (what + why, never how), then delegates to a read-only reviewer subagent that checks your diff against it in its own clean context — no confirmation bias from the build chat — then you fix the findings in the session that still knows every decision. Pass --blind for a pure code-only review. A companion /fresh-eyes:review-pr command reviews a GitHub PR by number — yours or a teammate's — in an isolated worktree, optionally answering your specific questions and checking coverage against a Linear issue's requirements (--issue <id>).",
   "author": {
     "name": "Yang"
   },

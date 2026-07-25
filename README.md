@@ -110,6 +110,98 @@ Two optional extras:
 | `plugins/fresh-eyes/commands/review-pr.md` | The `/fresh-eyes:review-pr` slash command (PR fetch, worktree isolation, Linear requirements + delegation) |
 | `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent shared by both commands |
 
-## License
+---
 
-MIT
+# Lazy Bones 🦴
+
+**The best code is the code never written.**
+
+A second plugin in this marketplace: a YAGNI enforcer adapted from
+[ponytail](https://github.com/DietrichGebert/ponytail) (MIT) — "the laziest
+senior dev in the room". Lazy means efficient, not careless: it shrinks the
+*solution*, never the reading, and it is never lazy about input validation,
+error handling, security, or accessibility.
+
+## Install
+
+```bash
+/plugin marketplace add yangzhengca/claude-plugins   # if not already added
+/plugin install lazy-bones@yangzhengca
+```
+
+## Usage
+
+```bash
+/lazy-bones:yagni            # lazy senior dev mode, intensity: full (default)
+/lazy-bones:yagni lite       # build what's asked, but name the lazier alternative
+/lazy-bones:yagni ultra      # YAGNI extremist — challenge the requirement itself
+/lazy-bones:yagni off        # back to normal
+
+/lazy-bones:review           # over-engineering review of the whole branch (vs. merge-base)
+/lazy-bones:review staged    # review only staged changes  (git diff --staged)
+/lazy-bones:review changes   # review only unstaged changes (git diff)
+/lazy-bones:review --pr 123  # review a GitHub PR's diff for YAGNI (via gh pr diff)
+
+/lazy-bones:audit            # scan the whole repo for over-engineering
+/lazy-bones:audit src/       # scan just one directory
+```
+
+### `/lazy-bones:yagni` — the mode
+
+Switches the session into lazy senior dev mode until turned off. Before any
+code is written, a decision ladder runs — stop at the first rung that holds:
+
+1. Does this need to exist at all? (YAGNI)
+2. Already in this codebase? Reuse it.
+3. Stdlib does it? Use it.
+4. Native platform feature covers it? Use it.
+5. Already-installed dependency solves it? Use it.
+6. Can it be one line? One line.
+7. Only then: the minimum code that works.
+
+No unrequested abstractions, no scaffolding "for later", deletion over
+addition, shortest working diff wins. Deliberate corner-cuts are marked with
+a `lazy-bones:` comment naming the ceiling and the upgrade path.
+
+### `/lazy-bones:review` — the diff review
+
+Reviews a diff for over-engineering **only** — the complement of a
+correctness review (that's `/fresh-eyes:review`). Same scopes as fresh-eyes
+(`staged`, `changes`, or omit for the whole branch), plus `--pr <number>` to
+review a GitHub PR's diff fetched with `gh pr diff` — no checkout, no
+worktree. Findings come back one tagged line each
+(`delete:` / `stdlib:` / `native:` / `yagni:` / `shrink:`) with location,
+what to cut, and what replaces it, ending with `net: -N lines possible.` —
+or `Lean already. Ship.` Report only; nothing is modified or posted.
+
+### `/lazy-bones:audit` — the bloat scan
+
+One-shot, repo-wide (or path-scoped) hunt for over-engineering: hand-rolled
+stdlib, dependencies the platform already covers, single-implementation
+abstractions, dead flags, wrappers that only delegate. Findings come back one
+line each, ranked biggest cut first and tagged
+`delete:` / `stdlib:` / `native:` / `yagni:` / `shrink:`, ending with
+`net: -N lines, -M deps possible.` — or `Lean already. Ship.` Report only;
+nothing is modified.
+
+## What's in the box
+
+| Path | What it is |
+|------|------------|
+| `plugins/lazy-bones/commands/yagni.md` | The `/lazy-bones:yagni` slash command (the session-wide lazy mode + intensity levels) |
+| `plugins/lazy-bones/commands/review.md` | The `/lazy-bones:review` slash command (over-engineering diff review — local scopes or `--pr <number>`) |
+| `plugins/lazy-bones/commands/audit.md` | The `/lazy-bones:audit` slash command (repo-wide over-engineering report) |
+
+## Credits
+
+Lazy Bones is adapted from
+[DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail),
+MIT-licensed. The decision ladder, tag taxonomy, and safety boundaries are
+ponytail's; this plugin repackages the core as Claude Code slash commands.
+
+---
+
+# License
+
+Both plugins are MIT-licensed — see [LICENSE](LICENSE), which also carries the
+copyright notice for the portions adapted from ponytail.

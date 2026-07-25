@@ -9,6 +9,11 @@
       "name": "fresh-eyes",
       "source": "./plugins/fresh-eyes",
       "description": "Get fresh eyes on what you just built: /fresh-eyes:review distills your session's goal into a task brief (what + why, never how), then delegates to a read-only reviewer subagent that checks your diff against it in its own clean context, then you fix findings in the session that built the code. Pass --blind for a pure code-only review. /fresh-eyes:review-pr reviews a GitHub PR (yours or a teammate's) in an isolated worktree, optionally answering your questions and checking requirement coverage against a Linear issue (--issue <id>)."
+    },
+    {
+      "name": "lazy-bones",
+      "source": "./plugins/lazy-bones",
+      "description": "The best code is the code never written. /lazy-bones:yagni switches the session into lazy senior dev mode — a YAGNI decision ladder (skip it → reuse it → stdlib → native → installed dep → one line → minimum code) enforced on every coding task, with lite/full/ultra intensity levels, never lazy about validation, error handling, security, or accessibility. /lazy-bones:review reviews a diff (staged, unstaged, whole branch, or a GitHub PR via --pr <number>) for over-engineering only — one tagged line per finding and a net-lines-cut score. /lazy-bones:audit scans the repo (or a path) for over-engineering and returns a ranked report of what to delete, simplify, or replace with stdlib/native equivalents. Adapted from DietrichGebert/ponytail (MIT)."
     }
   ]
 }

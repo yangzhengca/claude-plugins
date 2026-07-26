@@ -1,3 +1,5 @@
+<img width="1254" height="1254" alt="fresheyes" src="https://github.com/user-attachments/assets/4a1333bd-2df2-4ae2-b2dd-2391bdb6f1fc" />
+
 # Fresh Eyes 👀
 
 **Get fresh eyes on what you just built — without leaving the session that built it.**
@@ -111,6 +113,8 @@ Two optional extras:
 | `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent shared by both commands |
 
 ---
+
+<img width="1254" height="1254" alt="ChatGPT Image Jul 25, 2026, 09_50_02 AM" src="https://github.com/user-attachments/assets/e55381ba-63bd-4881-8179-b8e0e317ecca" />
 
 # Lazy Bones 🦴
 

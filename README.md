@@ -53,11 +53,13 @@ still knows everything you asked for.
 /fresh-eyes:review staged     # review only staged changes  (git diff --staged)
 /fresh-eyes:review changes    # review only unstaged changes (git diff)
 /fresh-eyes:review --blind    # skip the task brief — pure code-only review
+/fresh-eyes:review --no-check # skip the fact-check pass — reviewer's report as-is
 
 /fresh-eyes:review-pr 123                                  # review a PR (yours or a teammate's)
 /fresh-eyes:review-pr 123 is the cache invalidation right? # + get a question answered
 /fresh-eyes:review-pr 123 --issue AI-42                    # + check coverage vs a Linear issue
 /fresh-eyes:review-pr 123 --issue AI-42 is retry handled?  # both extras together — no quotes needed
+/fresh-eyes:review-pr 123 --no-check                       # skip the fact-check pass
 ```
 
 > Plugin commands are namespaced `/<plugin>:<command>`, so the command is
@@ -77,12 +79,70 @@ along would reimport the confirmation bias the clean context exists to remove.
 Pass `--blind` (combinable with a scope, e.g. `/fresh-eyes:review staged --blind`)
 to skip the brief entirely and get a pure code-only review.
 
+### The report
+
 The reviewer returns a structured report grouped by severity
-(**Critical / Warning / Nit**), each finding citing `file:line` with a concrete
-suggested fix, plus a summary carrying a brief-fulfillment assessment
+(**Critical / Warning / Nit**). Every finding is numbered (`F1`, `F2`, …),
+tagged with a category (`bug` / `security` / `performance` / `maintainability` /
+`test` / `style` / `docs`), and anchored two ways: `file:line` **plus a verbatim
+quote of the added lines it targets**, unique within the diff — so a
+hallucinated line number can't send you to the wrong place, and your main
+session can grep straight to it. Each finding ends with a concrete suggested fix.
+
+The summary carries a **coverage line** (every changed file ends the review as
+`reviewed` or `skipped: <reason>` — a header, config, or docs counterpart is
+never silently omitted), a brief-fulfillment assessment
 (`met` / `partially met` / `not met`) and a verdict
 (`ship` / `fix-before-merge` / `needs-discussion`).
 Nothing is modified — ask your main session to apply any fixes you want.
+
+### How the reviewer works
+
+The reviewer is tuned for **precision over recall**: a false positive costs
+trust in every other finding. Concretely, it
+
+- reads the change's shape first (`--stat`, `--name-status`) and builds a
+  coverage checklist before opening a single hunk;
+- writes a short risk plan on large diffs, works it, then does a second
+  **plan-free pass** so the plan never becomes a coverage ceiling;
+- establishes non-local claims (concurrency, attacker control, ownership,
+  callers) by reading call sites, never from a name or an import;
+- doesn't report what your compiler, type checker, linter, or formatter
+  already catches;
+- files findings only against added lines — deleted code is context, unchanged
+  code and files outside the diff are evidence, not targets;
+- looks for cross-file breakage: an interface changed without its
+  implementations, a config key without its reader, one locale file updated
+  and not the others;
+- skips generated and vendored files (lockfiles, snapshots, protobuf output,
+  `vendor/`, `dist/`) but keeps tests in scope, and **never opens
+  credential-shaped files** (`.env`, `id_rsa`, `.netrc`, `.npmrc`, …) even for
+  context — a committed one is reported as Critical by path only.
+
+### The fact-check pass
+
+After the reviewer returns, a second, deliberately narrow subagent
+(`fresh-eyes-fact-checker`) sees **only the diff** and the numbered findings —
+with severity withheld so it can't filter by value — and removes a finding only
+when the diff *proves* it wrong: the code it describes isn't in that file's
+diff, or a specific diff line literally contradicts its central claim. Anything
+unverifiable, low-value, or merely disputed is approved; findings about memory
+safety, concurrency, declaration consistency, behaviour changes, unused
+parameters, or committed secrets are **never** removed. Nothing is dropped
+silently — removed findings are listed in a `Fact-check` section with the
+refuting diff line. Pass `--no-check` to skip the pass.
+
+### Project rules
+
+Drop a `.fresh-eyes/review-rules.md` at your repo root and both commands pass it
+to the reviewer verbatim as a checklist to enforce: naming conventions, field
+orders, "if this file changes, those docs must change too", required regression
+tests — the kind of project knowledge a fresh-context reviewer can't infer from
+a diff. Rules that don't apply to a changed file are ignored; violations become
+findings (Warning unless the rule says otherwise). `review-pr` reads the file
+from **your** checkout, never from the PR's, so a PR can't rewrite its own
+review rules. This repo's own [`.fresh-eyes/review-rules.md`](.fresh-eyes/review-rules.md)
+is a small example.
 
 ### Reviewing a PR
 
@@ -90,8 +150,9 @@ Nothing is modified — ask your main session to apply any fixes you want.
 teammate's — instead of your local diff. The PR is fetched with `gh` and checked out **in an isolated
 git worktree** — your own checkout is never touched — then handed to the same
 reviewer subagent, with the PR's title and body as the task brief (treated as
-author-written claims to verify, not trust). The worktree is cleaned up
-afterwards, and nothing is ever posted to GitHub unless you ask.
+author-written claims to verify, not trust). The same fact-check pass and
+project rules apply. The worktree is cleaned up afterwards, and nothing is ever
+posted to GitHub unless you ask.
 
 Two optional extras:
 
@@ -111,6 +172,16 @@ Two optional extras:
 | `plugins/fresh-eyes/commands/review.md` | The `/fresh-eyes:review` slash command (scope resolution + delegation) |
 | `plugins/fresh-eyes/commands/review-pr.md` | The `/fresh-eyes:review-pr` slash command (PR fetch, worktree isolation, Linear requirements + delegation) |
 | `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent shared by both commands |
+| `plugins/fresh-eyes/agents/fresh-eyes-fact-checker.md` | The diff-only fact-checker subagent that runs after the reviewer (skip with `--no-check`) |
+| `.fresh-eyes/review-rules.md` | This repo's own project rules — an example of the file both commands pick up |
+
+### Credits
+
+The fact-check pass, quote-anchored findings, coverage checklist, and
+precision-over-recall bar are adapted from techniques in
+[alibaba/open-code-review](https://github.com/alibaba/open-code-review)
+(Apache-2.0); the fact-checker prompt in particular is a close adaptation of its
+review-filter prompt.
 
 ---
 

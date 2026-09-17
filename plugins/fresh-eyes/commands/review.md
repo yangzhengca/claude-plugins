@@ -10,12 +10,14 @@ optional arguments: "$ARGUMENTS"
 
 Split "$ARGUMENTS" on whitespace. Extract:
 
-- **blind mode**: present if any token is `--blind`. When set, skip Step 2
-  entirely — no task brief is produced or passed.
-- **no-check mode**: present if any token is `--no-check`. When set, skip
-  Step 5 (the fact-check pass) and relay the reviewer's report directly.
-- **scope keyword**: the remaining token, if any. If MORE than one token
-  remains, do not guess — stop and ask which scope was meant.
+- **blind mode**: present if any token is `--blind`. Remove it. When set,
+  skip Step 2 entirely — no task brief is produced or passed.
+- **no-check mode**: present if any token is `--no-check`. Remove it. When
+  set, skip Step 5 (the fact-check pass) and relay the reviewer's report
+  directly.
+- **scope keyword**: the single remaining token, if any, after both flags are
+  removed. If MORE than one token remains, do not guess — stop and ask which
+  scope was meant.
 
 Normalize the scope keyword (trim whitespace, case-insensitive) to one of three
 scopes:

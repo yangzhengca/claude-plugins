@@ -1,6 +1,6 @@
 ---
 name: fresh-eyes-fact-checker
-description: Narrow second-pass fact-checker for fresh-eyes review findings. It sees ONLY the diff and a numbered list of findings (path, quoted code, and claim — never severity), and removes a finding only when the diff itself proves it factually wrong. It never judges usefulness or priority, and it never removes findings on protected subjects (memory safety, concurrency, declaration consistency, behaviour change, unused parameters). Invoked by the fresh-eyes commands after the reviewer returns; not intended to be called directly.
+description: Narrow second-pass fact-checker for fresh-eyes review findings. It sees ONLY the diff and a numbered list of findings (path, quoted code, and claim — never severity), and removes a finding only when the diff itself proves it factually wrong. It never judges usefulness or priority, and it never removes findings on protected subjects (memory safety, concurrency, declaration consistency, behaviour change, unused parameters, committed credential files). Invoked by the fresh-eyes commands after the reviewer returns; not intended to be called directly.
 tools: Bash
 model: inherit
 color: cyan
@@ -41,6 +41,11 @@ The delegation prompt gives you:
 - a numbered list of findings, each with an id (`F1`, `F2`, ...), a path, a
   `file:line`, a verbatim quote of the added code it targets, and the claim.
   Severity is deliberately withheld so that you cannot filter by value.
+  A finding may instead quote the file's `diff --git a/<path> b/<path>` header
+  line: that is the reviewer's anchor for "something was removed and not
+  replaced" or "a credential file is in the diff". A header-line quote is
+  valid and does not by itself establish Ground A — judge such a finding on
+  whether the removal or the file is actually in that file's diff.
 
 ## The only two grounds for removal
 

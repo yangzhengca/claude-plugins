@@ -12,7 +12,7 @@ own PR or someone else's. The user invoked this command with the arguments:
 Split "$ARGUMENTS" on whitespace. Extract, in this order:
 
 - **no-check mode**: present if any token is `--no-check`. Remove it. When
-  set, skip Step 6 (the fact-check pass).
+  set, skip Step 7 (the fact-check pass).
 - **Linear issue id**: the token following `--issue` (also accept the
   `--issue=<id>` form). Remove both tokens from the list. Optional. If
   `--issue` is present but nothing follows it, stop and ask for the issue id.

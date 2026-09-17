@@ -193,5 +193,12 @@ than one place, extend the quote until it is unambiguous. The quote is how the
 main session and any follow-up check locate the finding, so a wrong quote is
 worse than no finding.
 
+Two kinds of finding have no added line to quote: something was removed and
+nothing replaced it, and a credential-shaped file appears in the diff. For
+those, quote the file's diff header line instead — `diff --git a/<path>
+b/<path>` — and cite the file with no line number (`path/to/file`). Never
+quote a `-` line as the anchor, and never quote any content of a credential
+file.
+
 Omit any severity bucket that has no items. If the diff is clean, say so
 explicitly. Do not apply changes yourself — this is read-only.

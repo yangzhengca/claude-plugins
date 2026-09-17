@@ -29,5 +29,6 @@ whenever a matching file is in the diff.
 
 ## README
 
-- The "What's in the box" table lists every file under `plugins/<name>/`;
-  adding a file without a row is a finding.
+- The "What's in the box" table lists every file under
+  `plugins/<name>/agents/` and `plugins/<name>/commands/`; adding a file there
+  without a row is a finding. Manifests are not listed.

@@ -21,7 +21,7 @@ have a flaw:
   it's biased: it already "decided" the changes were reasonable. You get a rubber
   stamp, not a review.
 - **Review in a separate, clean session** — now it's objective, but the moment you
-  ask it to *fix* the findings it's working blind. That session never saw your
+  ask it to _fix_ the findings it's working blind. That session never saw your
   instructions or the decisions behind the code, so the fixes drift from what you
   actually asked for.
 
@@ -37,11 +37,13 @@ still knows everything you asked for.
 ## Install
 
 ### 1. Add this repo as a plugin marketplace
+
 ```bash
 /plugin marketplace add yangzhengca/claude-plugins
 ```
 
 ### 2. Install the plugin
+
 ```bash
 /plugin install fresh-eyes@yangzhengca
 ```
@@ -70,7 +72,7 @@ still knows everything you asked for.
 Before delegating, your build session distills a **task brief** from the
 conversation — what you were trying to accomplish and why: the goal,
 requirements, decisions you made (including options you rejected), and
-constraints. The reviewer checks the diff *against the brief*, so it catches
+constraints. The reviewer checks the diff _against the brief_, so it catches
 unmet requirements and scope creep, not just bugs.
 
 The brief carries only the **what and why — never the how**. Implementation
@@ -93,7 +95,12 @@ The summary carries a **coverage line** (every changed file ends the review as
 `reviewed` or `skipped: <reason>` — a header, config, or docs counterpart is
 never silently omitted), a brief-fulfillment assessment
 (`met` / `partially met` / `not met`) and a verdict
-(`ship` / `fix-before-merge` / `needs-discussion`).
+(`ship` / `fix-before-merge` / `needs-discussion`). PR reviews add a
+**PR Conclusions** section with three direct verdicts, each backed by evidence
+from the diff: coding standards, patterns, and best practices
+(`follows` / `does not follow` / `cannot determine`); necessity and project
+value (`yes` / `no` / `cannot determine`); and edge cases and error handling
+(`handled` / `not handled` / `cannot determine`).
 Nothing is modified — ask your main session to apply any fixes you want.
 
 ### How the reviewer works
@@ -124,7 +131,7 @@ trust in every other finding. Concretely, it
 After the reviewer returns, a second, deliberately narrow subagent
 (`fresh-eyes-fact-checker`) sees **only the diff** and the numbered findings —
 with severity withheld so it can't filter by value — and removes a finding only
-when the diff *proves* it wrong: the code it describes isn't in that file's
+when the diff _proves_ it wrong: the code it describes isn't in that file's
 diff, or a specific diff line literally contradicts its central claim. Anything
 unverifiable, low-value, or merely disputed is approved; findings about memory
 safety, concurrency, declaration consistency, behaviour changes, unused
@@ -152,7 +159,11 @@ git worktree** — your own checkout is never touched — then handed to the sam
 reviewer subagent, with the PR's title and body as the task brief (treated as
 author-written claims to verify, not trust). The same fact-check pass and
 project rules apply. The worktree is cleaned up afterwards, and nothing is ever
-posted to GitHub unless you ask.
+posted to GitHub without your explicit approval, even in Auto mode. The PR
+report concludes whether the change follows project standards and patterns,
+is necessary and valuable, and handles edge cases and errors. If you later
+request PR comments, you choose which findings to post and approve their exact
+text and locations; inline comments are the default.
 
 Two optional extras:
 
@@ -163,17 +174,17 @@ Two optional extras:
 - **A Linear issue** — pass `--issue <id>` and the issue's requirements are
   fetched and given to the reviewer, which then rates every requirement
   `met` / `partial` / `missing` with `file:line` evidence, so coverage gaps
-  surface even when the code that *does* exist is correct.
+  surface even when the code that _does_ exist is correct.
 
 ## What's in the box
 
-| Path | What it is |
-|------|------------|
-| `plugins/fresh-eyes/commands/review.md` | The `/fresh-eyes:review` slash command (scope resolution + delegation) |
-| `plugins/fresh-eyes/commands/review-pr.md` | The `/fresh-eyes:review-pr` slash command (PR fetch, worktree isolation, Linear requirements + delegation) |
-| `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md` | The read-only reviewer subagent shared by both commands |
-| `plugins/fresh-eyes/agents/fresh-eyes-fact-checker.md` | The diff-only fact-checker subagent that runs after the reviewer (skip with `--no-check`) |
-| `.fresh-eyes/review-rules.md` | This repo's own project rules — an example of the file both commands pick up |
+| Path                                                   | What it is                                                                                                 |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `plugins/fresh-eyes/commands/review.md`                | The `/fresh-eyes:review` slash command (scope resolution + delegation)                                     |
+| `plugins/fresh-eyes/commands/review-pr.md`             | The `/fresh-eyes:review-pr` slash command (PR fetch, worktree isolation, Linear requirements + delegation) |
+| `plugins/fresh-eyes/agents/fresh-eyes-reviewer.md`     | The read-only reviewer subagent shared by both commands                                                    |
+| `plugins/fresh-eyes/agents/fresh-eyes-fact-checker.md` | The diff-only fact-checker subagent that runs after the reviewer (skip with `--no-check`)                  |
+| `.fresh-eyes/review-rules.md`                          | This repo's own project rules — an example of the file both commands pick up                               |
 
 ### Credits
 
@@ -194,7 +205,7 @@ review-filter prompt.
 A second plugin in this marketplace: a YAGNI enforcer adapted from
 [ponytail](https://github.com/DietrichGebert/ponytail) (MIT) — "the laziest
 senior dev in the room". Lazy means efficient, not careless: it shrinks the
-*solution*, never the reading, and it is never lazy about input validation,
+_solution_, never the reading, and it is never lazy about input validation,
 error handling, security, or accessibility.
 
 ## Install
@@ -261,11 +272,11 @@ nothing is modified.
 
 ## What's in the box
 
-| Path | What it is |
-|------|------------|
-| `plugins/lazy-bones/commands/yagni.md` | The `/lazy-bones:yagni` slash command (the session-wide lazy mode + intensity levels) |
+| Path                                    | What it is                                                                                              |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `plugins/lazy-bones/commands/yagni.md`  | The `/lazy-bones:yagni` slash command (the session-wide lazy mode + intensity levels)                   |
 | `plugins/lazy-bones/commands/review.md` | The `/lazy-bones:review` slash command (over-engineering diff review — local scopes or `--pr <number>`) |
-| `plugins/lazy-bones/commands/audit.md` | The `/lazy-bones:audit` slash command (repo-wide over-engineering report) |
+| `plugins/lazy-bones/commands/audit.md`  | The `/lazy-bones:audit` slash command (repo-wide over-engineering report)                               |
 
 ## Credits
 

@@ -30,7 +30,7 @@ If there is no PR number at all, stop and ask for one.
 Run:
 
 ```
-gh pr view <number> --json number,title,body,state,isDraft,author,baseRefName,headRefName,url
+gh pr view <number> --json number,title,body,state,isDraft,author,baseRefName,headRefName,headRefOid,url
 ```
 
 If this fails (gh missing, not authenticated, or no such PR), report the error
@@ -65,7 +65,7 @@ heading. If it does not exist, skip this step silently.
 Never check the PR branch out in the user's working copy, and never assume the
 PR lives in the `origin` remote: in a fork setup, `origin` may be the user's
 fork while the PR belongs to the upstream repo — which may even have a
-*different* PR with the same number. Derive the PR's home repository from the
+_different_ PR with the same number. Derive the PR's home repository from the
 `url` field fetched in Step 2 (strip the `/pull/<number>` suffix), then fetch
 BOTH sides of the PR from that repository into dedicated refs:
 
@@ -120,8 +120,11 @@ state explicitly:
   entirely if none was given,
 - that it must read surrounding file context as needed and end with its
   structured findings report — numbered findings, each with a verbatim quote of
-  the added code, plus the coverage line — answering every question and
-  assessing coverage of every requirement.
+  the added code, plus the coverage line and the three PR conclusions on
+  standards/patterns/best practices, necessity/value, and edge cases/error
+  handling — answering every question and assessing coverage of every
+  requirement. When necessity or value cannot be established from the PR brief
+  and available context, it must say so rather than assume.
 
 Do NOT review the code yourself — delegate and wait for the report. The
 subagent's clean context is the point: it reads the PR on its own merits.
@@ -152,6 +155,7 @@ fact-checker removed anything: take the removed findings out of the Findings
 section and append a short section:
 
 ### Fact-check
+
 - `<n>` findings checked against the diff, `<m>` removed.
 - **F<n>** — removed: <the checker's ground and refuting diff line, quoted>.
 
@@ -169,6 +173,22 @@ git update-ref -d refs/pr-review/<number>/head
 git update-ref -d refs/pr-review/<number>/base
 ```
 
-Do not modify any files, and do not post anything to GitHub. If I want the
-findings posted as PR comments, I will ask — then use `gh pr comment` or
-`gh pr review` with my confirmation on the exact text first.
+Do not modify any files, and do not post anything to GitHub during the review,
+even in Auto mode. If I later ask to post findings, show me the proposed
+comments with their exact text and locations and ask me to pick which finding
+IDs to post and explicitly approve posting before calling any posting tool.
+Post only the findings I picked; ignore the rest. Default to inline comments
+on the relevant changed lines unless I specify another format. Inline comments
+go through the review-comments API, using the `headRefOid` captured in Step 2
+as the commit and the finding's `path` and `line`:
+
+```
+gh api repos/{owner}/{repo}/pulls/<number>/comments \
+  -f commit_id=<headRefOid> -f path=<file> -F line=<line> -f body=<text>
+```
+
+Before posting, re-run `gh pr view <number> --json headRefOid` and stop to ask
+me if the head has moved since the review, because the line numbers may no
+longer match. If a picked finding cannot be posted inline, ask before using
+`gh pr comment` for a general PR comment instead.
+Never treat invocation of this review command or Auto mode as consent to post.

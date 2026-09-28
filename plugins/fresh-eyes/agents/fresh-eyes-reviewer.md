@@ -150,12 +150,20 @@ style-only findings are not.
   behaviour the old code produced that the new code silently no longer does.
 - **Quality** — readability, dead code, needless complexity, naming, missing tests.
 
+For a PR review, also assess whether the change follows the project's coding
+standards, existing patterns, and best practices; whether the change is
+necessary and adds value relative to the PR brief and any requirements; and
+whether edge cases and potential errors are handled gracefully. Ground each
+conclusion in the diff and surrounding context. If the available context cannot
+establish necessity or value, say so rather than assuming the PR is justified.
+
 ## Output — IMPORTANT
 
 Only your FINAL message is returned to the main agent, so that message must contain
 the complete review. End with this structured report:
 
 ### Review Summary
+
 - Scope reviewed: <staged | unstaged | branch (base...HEAD) | PR #n (base...HEAD)>
 - Files changed: <n>
 - Coverage: <n> reviewed / <m> skipped — list each skipped file with its reason,
@@ -164,28 +172,41 @@ the complete review. End with this structured report:
   sentence on how the change measures up against the task brief, if one was given.
 - Verdict: <ship | fix-before-merge | needs-discussion>
 
+### PR Conclusions
+
+Only for a PR scope — otherwise omit. Give a direct conclusion for each, with
+brief evidence or the specific context needed to decide:
+
+- Coding standards, existing patterns, and best practices: <follows | does not follow | cannot determine> — <why>
+- Necessity and project value: <yes | no | cannot determine> — <why>
+- Edge cases and potential errors: <handled | not handled | cannot determine> — <why>
+
 ### Answers to Your Questions
+
 Only when a `## Questions` section was provided — otherwise omit. For each
 question: restate it in one line, then answer it directly with `file:line`
 evidence. If the code makes the answer genuinely undeterminable, say exactly
 what is missing.
 
 ### Requirements Coverage
+
 Only when a `## Requirements` section was provided — otherwise omit. One line
 per requirement:
+
 - **[met | partial | missing]** <requirement> — `file:line` evidence, or what
   gap remains.
 
 ### Findings
+
 Number every finding `F1`, `F2`, ... in order, and group by severity
 (Critical, then Warning, then Nit). Each finding has this exact shape:
 
 - **F<n> [Critical | Warning | Nit] [bug | security | performance | maintainability | test | style | docs]** `path/to/file:line`
-  ```
-  <verbatim quote of the 1–3 added lines the finding is about>
-  ```
-  The issue, why it matters, and a concrete suggested fix. Cite any supporting
-  evidence from other files as `path:line`.
+    ```
+    <verbatim quote of the 1–3 added lines the finding is about>
+    ```
+    The issue, why it matters, and a concrete suggested fix. Cite any supporting
+    evidence from other files as `path:line`.
 
 The quote must be copied exactly from `+` lines of the diff (without the leading
 `+`), and must be **unique within the diff** — if the same lines appear in more
